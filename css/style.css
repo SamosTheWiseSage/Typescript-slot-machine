@@ -1,0 +1,18 @@
+.symbol {
+    width: 30px;
+    height: 30px;
+  }
+  .body{
+    justify-content: center;
+  }
+  .Slot-Window{
+    margin-left: 50%;
+    margin-right: 50%;
+  display:list-item;
+  list-style: none;
+  justify-content: center;
+  }
+  .Image-combo{
+    display: flex;
+    justify-content: center;
+  }

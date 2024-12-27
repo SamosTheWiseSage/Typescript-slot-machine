@@ -1,3 +1,25 @@
+import pool from './database';  // Import database connection
+
+async function getToken() {
+    let conn;
+    try {
+        conn = await pool.getConnection();  // Get connection from pool
+        const rows = await conn.query('SELECT * FROM users');
+        console.log(rows);  // Log the query results
+        return rows;
+    } catch (err) {
+        console.error('Error fetching users:', err);
+    } finally {
+        if (conn) conn.release();  // Always release the connection back to the pool
+    }
+}
+
+// Fetch tokens and display
+getToken().then((Tokens) => {
+    Tokens.forEach((Token: { TokenName: string, TokenValue: string }) => {
+        console.log(`Name: ${Token.TokenName}, Value: ${Token.TokenValue}`);
+    });
+});
 const Slot1 = document.querySelector("#Slot1")
 const NumberSlot1 = document.querySelector("#NumberSlot1")
 const Slot2 = document.querySelector("#Slot2")
@@ -22,6 +44,7 @@ var eventTrigger = document.querySelector("#SlotImage1")
  let laharlToken: number = 0
  const LaharlToken = document.querySelector("#laharlToken")
  let LOVE: number = 0
+ const LoveToken = document.querySelector("#loveToken")
     let Filled1 = false
     let Filled2 = false
     let Filled3 = false

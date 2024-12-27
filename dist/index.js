@@ -1,42 +1,4 @@
 "use strict";
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-const database_1 = __importDefault(require("./database")); // Import database connection
-function getToken() {
-    return __awaiter(this, void 0, void 0, function* () {
-        let conn;
-        try {
-            conn = yield database_1.default.getConnection(); // Get connection from pool
-            const rows = yield conn.query('SELECT * FROM users');
-            console.log(rows); // Log the query results
-            return rows;
-        }
-        catch (err) {
-            console.error('Error fetching users:', err);
-        }
-        finally {
-            if (conn)
-                conn.release(); // Always release the connection back to the pool
-        }
-    });
-}
-// Fetch tokens and display
-getToken().then((Tokens) => {
-    Tokens.forEach((Token) => {
-        console.log(`Name: ${Token.TokenName}, Value: ${Token.TokenValue}`);
-    });
-});
 const Slot1 = document.querySelector("#Slot1");
 const NumberSlot1 = document.querySelector("#NumberSlot1");
 const Slot2 = document.querySelector("#Slot2");
@@ -61,7 +23,6 @@ let laharl = 0;
 let laharlToken = 0;
 const LaharlToken = document.querySelector("#laharlToken");
 let LOVE = 0;
-const LoveToken = document.querySelector("#loveToken");
 let Filled1 = false;
 let Filled2 = false;
 let Filled3 = false;

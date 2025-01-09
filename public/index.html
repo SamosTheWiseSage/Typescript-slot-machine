@@ -6,12 +6,20 @@
   <body class="body">
     <script type="module" src="/dist/index.js"></script>
     <link rel="stylesheet" href="/css/style.css">   
-    <p id="Testthis">Hello there homie</p>
-    <p>Chips:</p>
+    <p id="Testthis">The Default Bet is 20 credits. Please use buttons below to change your bet. Bigger bets give more rewards.</p>
+    <p>Chips:<p id="Currency">0</p>
+    <p id="Debt">0</p>
+    <p id="Profit">Profit:0</p>
+    <p id="Bet">20</p>
+  </p>
     <p>Flonne token:<p id="flonneToken">0</p></p>
     <p>Etna token:<p id="etnaToken">0</p></p>
     <p>Laharl token:<p id="laharlToken">0</p></p>
     <p>Love token:<p id="loveToken">0</p></p>
+    <div class="Slot-Window">
+      <p id="win"></p>
+    </div>
+    <p id="Alert"></p>
     <div class="Slot-Window">
         <div class="reel" id="Slot1"><p id="NumberSlot1">0</p></div>
         <div class="reel" id="Slot2"><p id="NumberSlot2">0</p></div>
@@ -23,6 +31,11 @@
         <div class="symbol" id="SlotImage3"></div>
     </div>
     <button id="ButtonRoller">Spin me</button>
-    <button id="Buttonreset">Reset</button>
+    <button id="Buttonreset">Bet:20</button>
+    <button id="Buttonreset2">Bet:40</button>
+    <button id="Buttonreset3">Bet:120</button>
+    <button id="Buttonreset4">Decrease Bet:-20</button>
+    <button id="Buttonreset5">Decrease Bet:-40</button>
+    <button id="Buttonreset6">Decrease Bet:-120</button>
     </body>
 </html>

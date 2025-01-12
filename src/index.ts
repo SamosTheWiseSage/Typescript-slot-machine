@@ -46,6 +46,10 @@ var eventTrigger:HTMLElement | any = document.querySelector("#SlotImage1")
   let Win: number = 0
   let wintoken: number = 0
   const WINToken:HTMLElement | any = document.querySelector('#win')
+  let rob:number = 0
+  let rob2:number = 0
+  let robToken: number = 0
+  const RobToken:HTMLElement | any = document.querySelector('#rob')
 
     let Filled1:boolean = false
     let Filled2:boolean = false
@@ -58,30 +62,42 @@ const collection = [
     "./Images/DisgeaWinCutscene1.webp",
     "./Images/DisgeaBankruptCutscene1.webp",
     "./Images/DisgeaJackPot1.jpg",
-    "./Images/dis-rouge.jpg",
+    "./Images/DisgeaTheifMale.webp",
     "./Images/Prinny_d1p.webp",
-    "./Images/Hoggmeiserportait.webp"
+    "./Images/Hoggmeiserportrait.webp"
 ]
 bet20!.addEventListener('click',()=>{
   fetchData()
-  update(ref(database, 'Money-Balance'), {
+  if (currency>=20) {
+          update(ref(database, 'Money-Balance'), {
     Chips: increment(+20),
     Credit: increment(-20)
   });
+  } else{
+    Alert.innerHTML = "Sorry you dont have enough credit"
+  }
 })
 bet40!.addEventListener('click',()=>{
   fetchData()
-  update(ref(database, 'Money-Balance'), {
+  if (currency>=40) {
+          update(ref(database, 'Money-Balance'), {
     Chips: increment(+40),
     Credit: increment(-40)
   });
+  } else{
+    Alert.innerHTML = "Sorry you dont have enough credit"
+  }
 })
 bet120!.addEventListener('click',()=>{
   fetchData()
-  update(ref(database, 'Money-Balance'), {
-    Chips: increment(+120),
-    Credit: increment(-120)
-  });
+  if (currency>=120) {
+    update(ref(database, 'Money-Balance'), {
+      Chips: increment(+120),
+      Credit: increment(-120)
+    });
+} else{
+Alert.innerHTML = "Sorry you dont have enough credit"
+}
 })
 window.addEventListener('load', function() {
   console.log("heloooooo")
@@ -193,6 +209,7 @@ const GameCheck = async ()=> {
 })} 
 }
 ExitShopButton.addEventListener('click', ()=>{
+  Alert!.innerHTML = ""
   shopdiv!.classList.add('hidden')
   SlotWindow!.classList.add('Slot-Window')
   SlotWindow!.classList.remove('hidden')
@@ -230,7 +247,7 @@ Button!.addEventListener('click',()=>{
   fetchData()
   console.log(chips,currency)  
   GameCheck()
-  if (chips !=0 && chips >0) {
+  if (chips !=0 && chips >0 && trueSpend<=chips) {
      fetchData()
       update(ref(database, 'Money-Balance'), {
         Debt: increment(-trueSpend)
@@ -254,6 +271,8 @@ Button!.addEventListener('click',()=>{
     flonne = 0
     etna = 0
     LOVE = 0
+    rob = 0
+    rob2 = 0
     eventTrigger!.replaceChildren(work.src = "")
     eventTrigger2!.replaceChildren(work2.src= "")
     eventTrigger3!.replaceChildren(work3.src= "")
@@ -392,21 +411,93 @@ if (a ==7 && Filled1 == false) {
   work!.src = collection[6] //WORKRORKORKOR
   work.style.width = "80px"
   eventTrigger!.append(work!)
- 
+
 }
 if (b ==7 && Filled2 == false) {
   Filled2 = true
   work2!.src = collection[6]
   work2.style.width = "80px"
   eventTrigger2!.append(work2!)
- 
+
 }
 if (c ==7 && Filled3 == false) {
   Filled3 = true
   work3!.src = collection[6]
   work3.style.width = "80px"
   eventTrigger3!.append(work3!)
+
+}
+if (a ==8 && Filled1 == false) {
+  Filled1 = true
+  work!.src = collection[7] //WORKRORKORKOR
+  work.style.width = "80px"
+  eventTrigger!.append(work!)
+  rob+=1
+}
+if (b ==8 && Filled2 == false) {
+  Filled2 = true
+  work2!.src = collection[7]
+  work2.style.width = "80px"
+  eventTrigger2!.append(work2!)
+  rob+=1
+}
+if (c ==8 && Filled3 == false) {
+  Filled3 = true
+  work3!.src = collection[7]
+  work3.style.width = "80px"
+  eventTrigger3!.append(work3!)
+  rob+=1
+}
+
+if (a ==9 && Filled1 == false) {
+  Filled1 = true
+  work!.src = collection[8] //WORKRORKORKOR
+  work.style.width = "80px"
+  eventTrigger!.append(work!)
+ 
+}
+if (b ==9 && Filled2 == false) {
+  Filled2 = true
+  work2!.src = collection[8]
+  work2.style.width = "80px"
+  eventTrigger2!.append(work2!)
+ 
+}
+if (c ==9 && Filled3 == false) {
+  Filled3 = true
+  work3!.src = collection[8]
+  work3.style.width = "80px"
+  eventTrigger3!.append(work3!)
   
+}
+
+if (a ==10 && Filled1 == false) {
+  Filled1 = true
+  work!.src = collection[9] //WORKRORKORKOR
+  work.style.width = "80px"
+  eventTrigger!.append(work!)
+  rob2+=1
+}
+if (b ==10 && Filled2 == false) {
+  Filled2 = true
+  work2!.src = collection[9]
+  work2.style.width = "80px"
+  eventTrigger2!.append(work2!)
+  rob2+=1
+}
+if (c ==10 && Filled3 == false) {
+  Filled3 = true
+  work3!.src = collection[9]
+  work3.style.width = "80px"
+  eventTrigger3!.append(work3!)
+  rob2+=1
+}
+if (rob==3) {
+  console.log(rob)
+  Alert.innerHTML="holymothers! your Robbed!"
+  update(ref(database, 'Money-Balance'), {
+    Credit: increment(-120)
+  });
 }
 if (Win==3) {
   update(ref(database, 'Money-Balance'), {

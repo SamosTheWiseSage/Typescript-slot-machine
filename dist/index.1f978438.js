@@ -625,20 +625,22 @@ var __awaiter = undefined && undefined.__awaiter || function(thisArg, _arguments
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-const Slot1 = document.querySelector("#Slot1");
-const NumberSlot1 = document.querySelector("#NumberSlot1");
-const Slot2 = document.querySelector("#Slot2");
-const NumberSlot2 = document.querySelector("#NumberSlot2");
-const Slot3 = document.querySelector("#Slot3");
-const NumberSlot3 = document.querySelector("#NumberSlot3");
 const Button = document.querySelector('#ButtonRoller');
 const Button2 = document.querySelector('#Buttonreset');
 const Button3 = document.querySelector('#Buttonreset2');
 const Button4 = document.querySelector('#Buttonreset3');
-const Button5 = document.querySelector('#Buttonreset4');
-const Button6 = document.querySelector('#Buttonreset5');
-const Button7 = document.querySelector('#Buttonreset6');
+const ShopButton = document.querySelector('#ShopButton');
+const ExitShopButton = document.querySelector('#ExitButton');
+const GameOverDiv = document.querySelector('#Game-Over');
+const SlotWindow = document.querySelector('#SlotWindow');
+const shopdiv = document.querySelector('#shop');
+shopdiv.classList.add('hidden');
+const buttonDiv = document.querySelector('#buttonDiv');
 const Alert = document.querySelector('#Alert');
+const AlertGame = document.querySelector('#AlertGame');
+const bet20 = document.querySelector('#bet20');
+const bet40 = document.querySelector('#bet40');
+const bet120 = document.querySelector('#bet120');
 var eventTrigger = document.querySelector("#SlotImage1");
 var work = document.createElement("img");
 var eventTrigger2 = document.querySelector("#SlotImage2");
@@ -647,14 +649,13 @@ var eventTrigger3 = document.querySelector("#SlotImage3");
 var work3 = document.createElement("img");
 let debt = 0;
 const Debt = document.querySelector('#Debt');
-let SpendingDefault = 20;
-let Spending2 = 40;
-let spending3 = 120;
-let betnumber = 0;
 let trueSpend = 0;
 const BetStake = document.querySelector('#Bet');
 const Currency = document.querySelector('#Currency');
 let currency = 0;
+const Chips = document.querySelector('#Chips');
+let chips = 0;
+const Profit = document.querySelector('#Profit');
 let flonne = 0;
 let flonneToken = 0;
 const FlonneToken = document.querySelector("#flonneToken");
@@ -679,8 +680,45 @@ const collection = [
     "./Images/EtnaSlot3.webp",
     "./Images/DisgeaLoveCombo.webp",
     "./Images/DisgeaWinCutscene1.webp",
-    "./Images/DisgeaBankruptCutscene1.webp"
+    "./Images/DisgeaBankruptCutscene1.webp",
+    "./Images/DisgeaJackPot1.jpg",
+    "./Images/dis-rouge.jpg",
+    "./Images/Prinny_d1p.webp",
+    "./Images/Hoggmeiserportait.webp"
 ];
+bet20.addEventListener('click', ()=>{
+    fetchData();
+    (0, _database.update)((0, _firebaseconfig.ref)((0, _firebaseconfig.database), 'Money-Balance'), {
+        Chips: (0, _database.increment)(20),
+        Credit: (0, _database.increment)(-20)
+    });
+});
+bet40.addEventListener('click', ()=>{
+    fetchData();
+    (0, _database.update)((0, _firebaseconfig.ref)((0, _firebaseconfig.database), 'Money-Balance'), {
+        Chips: (0, _database.increment)(40),
+        Credit: (0, _database.increment)(-40)
+    });
+});
+bet120.addEventListener('click', ()=>{
+    fetchData();
+    (0, _database.update)((0, _firebaseconfig.ref)((0, _firebaseconfig.database), 'Money-Balance'), {
+        Chips: (0, _database.increment)(120),
+        Credit: (0, _database.increment)(-120)
+    });
+});
+window.addEventListener('load', function() {
+    console.log("heloooooo");
+    work.style.width = "80px";
+    work.src = collection[0];
+    eventTrigger.append(work);
+    work2.style.width = "80px";
+    work2.src = collection[1];
+    eventTrigger2.append(work2);
+    work3.style.width = "80px";
+    work3.src = collection[2];
+    eventTrigger3.append(work3);
+});
 const fetchData = ()=>__awaiter(void 0, void 0, void 0, function*() {
         try {
             const dataRef = (0, _firebaseconfig.ref)((0, _firebaseconfig.database), 'Tokens');
@@ -691,6 +729,8 @@ const fetchData = ()=>__awaiter(void 0, void 0, void 0, function*() {
             const dataCurrency = (0, _firebaseconfig.ref)((0, _firebaseconfig.database), 'Money-Balance/Credit');
             const dataCurrency2 = (0, _firebaseconfig.ref)((0, _firebaseconfig.database), 'Money-Balance/Debt');
             const dataCurrency3 = (0, _firebaseconfig.ref)((0, _firebaseconfig.database), 'Money-Balance/Bet');
+            const dataCurrency4 = (0, _firebaseconfig.ref)((0, _firebaseconfig.database), 'Money-Balance/Profit');
+            const dataCurrency5 = (0, _firebaseconfig.ref)((0, _firebaseconfig.database), 'Money-Balance/Chips');
             const snapshot = yield (0, _firebaseconfig.get)(dataRef);
             if (snapshot.exists()) {
                 const snap2 = yield (0, _firebaseconfig.get)(dataRef2);
@@ -721,6 +761,14 @@ const fetchData = ()=>__awaiter(void 0, void 0, void 0, function*() {
                 const betData = snapBet.val();
                 trueSpend = betData;
                 BetStake.innerHTML = 'Bet: ' + trueSpend;
+                const snapProfit = yield (0, _firebaseconfig.get)(dataCurrency4);
+                const ProfitData = snapProfit.val();
+                const profits = ProfitData;
+                Profit.innerHTML = 'Profits: ' + profits;
+                const snapchips = yield (0, _firebaseconfig.get)(dataCurrency5);
+                const datachips = snapchips.val();
+                chips = datachips;
+                Chips.innerHTML = 'Chips: ' + chips;
                 const data = snapshot.val();
                 console.log('Fetched data:', data);
             } else console.log('No data available');
@@ -729,211 +777,262 @@ const fetchData = ()=>__awaiter(void 0, void 0, void 0, function*() {
         }
     });
 window.onload = fetchData;
+const GameCheck = ()=>__awaiter(void 0, void 0, void 0, function*() {
+        if (chips <= 0 && currency != 0) {
+            Alert.innerHTML = "You cannot bet 0 chips sir/madam. please use the shop";
+            shopdiv.classList.remove('hidden');
+            SlotWindow.classList.remove('Slot-Window');
+            SlotWindow.classList.add('hidden');
+            buttonDiv.classList.add('hidden');
+            ShopButton.classList.add('hidden');
+        }
+        if (chips <= 0 && currency <= 0) {
+            console.log(chips, currency);
+            AlertGame.innerHTML = "Game OVER";
+            const RetryButton = document.createElement('button');
+            GameOverDiv.append(RetryButton);
+            RetryButton.innerText = "Try Again";
+            GameOverDiv.classList.add('Slot-Window');
+            SlotWindow.classList.remove('Slot-Window');
+            SlotWindow.classList.add('hidden');
+            buttonDiv.classList.add('hidden');
+            RetryButton.addEventListener('click', ()=>{
+                fetchData();
+                GameOverDiv.classList.remove('Slot-Window');
+                GameOverDiv.classList.add('hidden');
+                SlotWindow.classList.add('Slot-Window');
+                SlotWindow.classList.remove('hidden');
+                buttonDiv.classList.remove('hidden');
+                (0, _database.update)((0, _firebaseconfig.ref)((0, _firebaseconfig.database), 'Money-Balance'), {
+                    Chips: 200,
+                    Credit: 2000,
+                    Debt: 0
+                });
+            });
+        }
+    });
+ExitShopButton.addEventListener('click', ()=>{
+    shopdiv.classList.add('hidden');
+    SlotWindow.classList.add('Slot-Window');
+    SlotWindow.classList.remove('hidden');
+    buttonDiv.classList.remove('hidden');
+    ShopButton.classList.remove('hidden');
+});
+ShopButton.addEventListener('click', ()=>{
+    shopdiv.classList.remove('hidden');
+    SlotWindow.classList.remove('Slot-Window');
+    SlotWindow.classList.add('hidden');
+    buttonDiv.classList.add('hidden');
+    ShopButton.classList.add('hidden');
+});
 Button2.addEventListener('click', ()=>{
     fetchData();
-    Filled1 = false;
-    Filled2 = false;
-    Filled3 = false;
-    eventTrigger.replaceChildren(work.src = "");
-    eventTrigger2.replaceChildren(work2.src = "");
-    eventTrigger3.replaceChildren(work3.src = "");
+    Alert.innerHTML = "";
     (0, _database.update)((0, _firebaseconfig.ref)((0, _firebaseconfig.database), 'Money-Balance'), {
-        Bet: (0, _database.increment)(20)
+        Bet: 20
     });
 });
 Button3.addEventListener('click', ()=>{
     fetchData();
-    Filled1 = false;
-    Filled2 = false;
-    Filled3 = false;
-    eventTrigger.replaceChildren(work.src = "");
-    eventTrigger2.replaceChildren(work2.src = "");
-    eventTrigger3.replaceChildren(work3.src = "");
     (0, _database.update)((0, _firebaseconfig.ref)((0, _firebaseconfig.database), 'Money-Balance'), {
-        Bet: (0, _database.increment)(40)
+        Bet: 40
     });
 });
 Button4.addEventListener('click', ()=>{
     fetchData();
-    Filled1 = false;
-    Filled2 = false;
-    Filled3 = false;
-    eventTrigger.replaceChildren(work.src = "");
-    eventTrigger2.replaceChildren(work2.src = "");
-    eventTrigger3.replaceChildren(work3.src = "");
-    (0, _database.update)((0, _firebaseconfig.ref)((0, _firebaseconfig.database), 'Money-Balance'), {
-        Bet: (0, _database.increment)(120)
-    });
-});
-Button5.addEventListener('click', ()=>{
-    fetchData();
-    Filled1 = false;
-    Filled2 = false;
-    Filled3 = false;
-    eventTrigger.replaceChildren(work.src = "");
-    eventTrigger2.replaceChildren(work2.src = "");
-    eventTrigger3.replaceChildren(work3.src = "");
     Alert.innerHTML = "";
     (0, _database.update)((0, _firebaseconfig.ref)((0, _firebaseconfig.database), 'Money-Balance'), {
-        Bet: (0, _database.increment)(-20)
+        Bet: 120
     });
-});
-Button6.addEventListener('click', ()=>{
-    fetchData();
-    Filled1 = false;
-    Filled2 = false;
-    Filled3 = false;
-    eventTrigger.replaceChildren(work.src = "");
-    eventTrigger2.replaceChildren(work2.src = "");
-    eventTrigger3.replaceChildren(work3.src = "");
-    Alert.innerHTML = "";
-    (0, _database.update)((0, _firebaseconfig.ref)((0, _firebaseconfig.database), 'Money-Balance'), {
-        Bet: (0, _database.increment)(-40)
-    });
-});
-Button7.addEventListener('click', ()=>{
-    fetchData();
-    Filled1 = false;
-    Filled2 = false;
-    Filled3 = false;
-    eventTrigger.replaceChildren(work.src = "");
-    eventTrigger2.replaceChildren(work2.src = "");
-    eventTrigger3.replaceChildren(work3.src = "");
-    Alert.innerHTML = "";
-    if (trueSpend <= 0) {
-        (0, _database.update)((0, _firebaseconfig.ref)((0, _firebaseconfig.database), 'Money-Balance'), {
-            Bet: (0, _database.increment)(-120)
-        });
-        console.log('hello testing');
-    }
 });
 Button.addEventListener('click', ()=>{
-    Filled1 = false;
-    Filled2 = false;
-    Filled3 = false;
     fetchData();
-    if (currency <= 0) (0, _database.update)((0, _firebaseconfig.ref)((0, _firebaseconfig.database), 'Money-Balance'), {
-        Debt: (0, _database.increment)(-trueSpend)
-    });
-    (0, _database.update)((0, _firebaseconfig.ref)((0, _firebaseconfig.database), 'Money-Balance'), {
-        Credit: (0, _database.increment)(-trueSpend)
-    });
-    Debt.innerHTML = 'Debt: ' + debt;
-    Currency.innerHTML = 'Credit: ' + currency;
-    laharl = 0;
-    flonne = 0;
-    etna = 0;
-    LOVE = 0;
-    eventTrigger.replaceChildren(work.src = "");
-    eventTrigger2.replaceChildren(work2.src = "");
-    eventTrigger3.replaceChildren(work3.src = "");
-    var a = Math.floor(Math.random() * 10 + 1);
-    var b = Math.floor(Math.random() * 10 + 1);
-    var c = Math.floor(Math.random() * 10 + 1);
-    NumberSlot1.innerHTML = a;
-    NumberSlot2.innerHTML = b;
-    NumberSlot3.innerHTML = c;
-    if (a == 4 && Filled1 == false) {
-        Filled1 = true;
-        work.src = collection[0];
-        work.style.width = "30px";
-        eventTrigger.append(work);
-        flonne += 1;
+    console.log(chips, currency);
+    GameCheck();
+    if (chips != 0 && chips > 0) {
+        fetchData();
+        (0, _database.update)((0, _firebaseconfig.ref)((0, _firebaseconfig.database), 'Money-Balance'), {
+            Debt: (0, _database.increment)(-trueSpend)
+        });
+        (0, _database.update)((0, _firebaseconfig.ref)((0, _firebaseconfig.database), 'Money-Balance'), {
+            Chips: (0, _database.increment)(-trueSpend)
+        });
+        if (chips - debt > 0) {
+            fetchData();
+            let profitschange = chips - debt;
+            (0, _database.update)((0, _firebaseconfig.ref)((0, _firebaseconfig.database), 'Money-Balance'), {
+                Profit: profitschange
+            });
+        }
+        Filled1 = false;
+        Filled2 = false;
+        Filled3 = false;
+        laharl = 0;
+        flonne = 0;
+        etna = 0;
+        LOVE = 0;
+        eventTrigger.replaceChildren(work.src = "");
+        eventTrigger2.replaceChildren(work2.src = "");
+        eventTrigger3.replaceChildren(work3.src = "");
+        var a = Math.floor(Math.random() * 10 + 1);
+        var b = Math.floor(Math.random() * 10 + 1);
+        var c = Math.floor(Math.random() * 10 + 1);
+        if (a == 1 && Filled1 == false) {
+            Filled1 = true;
+            work.src = collection[0];
+            work.style.width = "80px";
+            eventTrigger.append(work);
+            flonne += 1;
+        }
+        if (b == 1 && Filled2 == false) {
+            Filled2 = true;
+            work2.src = collection[0];
+            work2.style.width = "80px";
+            eventTrigger2.append(work2);
+            flonne += 1;
+        }
+        if (c == 1 && Filled3 == false) {
+            Filled3 = true;
+            work3.style.width = "80px";
+            work3.src = collection[0];
+            eventTrigger3.append(work3);
+            flonne += 1;
+        }
+        if (a == 2 && Filled1 == false) {
+            Filled1 = true;
+            work.src = collection[1];
+            work.style.width = "80px";
+            eventTrigger.append(work);
+            laharl += 1;
+        }
+        if (b == 2 && Filled2 == false) {
+            Filled2 = true;
+            work2.src = collection[1];
+            work2.style.width = "80px";
+            eventTrigger2.append(work2);
+            laharl += 1;
+        }
+        if (c == 2 && Filled3 == false) {
+            Filled3 = true;
+            work3.src = collection[1];
+            work3.style.width = "80px";
+            eventTrigger3.append(work3);
+            laharl += 1;
+        }
+        if (a == 3 && Filled1 == false) {
+            Filled1 = true;
+            work.src = collection[2];
+            work.style.width = "80px";
+            eventTrigger.append(work);
+            etna += 1;
+        }
+        if (b == 3 && Filled2 == false) {
+            Filled2 = true;
+            work2.src = collection[2];
+            work2.style.width = "80px";
+            eventTrigger2.append(work2);
+            etna += 1;
+        }
+        if (c == 3 && Filled3 == false) {
+            Filled3 = true;
+            work3.src = collection[2];
+            work3.style.width = "80px";
+            eventTrigger3.append(work3);
+            etna += 1;
+        }
+        if (a == 4 && Filled1 == false) {
+            Filled1 = true;
+            work.src = collection[3];
+            work.style.width = "80px";
+            eventTrigger.append(work);
+            LOVE += 1;
+        }
+        if (b == 4 && Filled2 == false) {
+            Filled2 = true;
+            work2.src = collection[3];
+            work2.style.width = "80px";
+            eventTrigger2.append(work2);
+            LOVE += 1;
+        }
+        if (c == 4 && Filled3 == false) {
+            Filled3 = true;
+            work3.src = collection[3];
+            work3.style.width = "80px";
+            eventTrigger3.append(work3);
+            LOVE += 1;
+        }
+        if (a == 5 && Filled1 == false) {
+            Filled1 = true;
+            work.src = collection[4];
+            work.style.width = "80px";
+            eventTrigger.append(work);
+        }
+        if (b == 5 && Filled2 == false) {
+            Filled2 = true;
+            work2.src = collection[4];
+            work2.style.width = "80px";
+            eventTrigger2.append(work2);
+        }
+        if (c == 5 && Filled3 == false) {
+            Filled3 = true;
+            work3.src = collection[4];
+            work3.style.width = "80px";
+            eventTrigger3.append(work3);
+        }
+        if (a == 6 && Filled1 == false) {
+            Filled1 = true;
+            work.src = collection[5]; //WORKRORKORKOR
+            work.style.width = "80px";
+            eventTrigger.append(work);
+        }
+        if (b == 6 && Filled2 == false) {
+            Filled2 = true;
+            work2.src = collection[5];
+            work2.style.width = "80px";
+            eventTrigger2.append(work2);
+        }
+        if (c == 6 && Filled3 == false) {
+            Filled3 = true;
+            work3.src = collection[5];
+            work3.style.width = "80px";
+            eventTrigger3.append(work3);
+        }
+        if (a == 7 && Filled1 == false) {
+            Filled1 = true;
+            work.src = collection[6]; //WORKRORKORKOR
+            work.style.width = "80px";
+            eventTrigger.append(work);
+        }
+        if (b == 7 && Filled2 == false) {
+            Filled2 = true;
+            work2.src = collection[6];
+            work2.style.width = "80px";
+            eventTrigger2.append(work2);
+        }
+        if (c == 7 && Filled3 == false) {
+            Filled3 = true;
+            work3.src = collection[6];
+            work3.style.width = "80px";
+            eventTrigger3.append(work3);
+        }
+        if (Win == 3) (0, _database.update)((0, _firebaseconfig.ref)((0, _firebaseconfig.database), 'Money-Balance'), {
+            Credit: 155000
+        });
+        if (LOVE == 3) (0, _database.update)((0, _firebaseconfig.ref)((0, _firebaseconfig.database), 'Tokens'), {
+            LOVE: (0, _database.increment)(1)
+        });
+        if (etna == 3) (0, _database.update)((0, _firebaseconfig.ref)((0, _firebaseconfig.database), 'Tokens'), {
+            EtnaToken: (0, _database.increment)(1)
+        });
+        if (flonne == 3) (0, _database.update)((0, _firebaseconfig.ref)((0, _firebaseconfig.database), 'Tokens'), {
+            FlonneToken: (0, _database.increment)(1)
+        });
+        if (laharl == 3) //laharlToken+= 1
+        //LaharlToken!.innerHTML = laharlToken as unknown as string
+        (0, _database.update)((0, _firebaseconfig.ref)((0, _firebaseconfig.database), 'Tokens'), {
+            LaharlToken: (0, _database.increment)(1)
+        });
     }
-    if (b == 4 && Filled2 == false) {
-        Filled2 = true;
-        work2.src = collection[0];
-        work2.style.width = "30px";
-        eventTrigger2.append(work2);
-        flonne += 1;
-    }
-    if (c == 4 && Filled3 == false) {
-        Filled3 = true;
-        work3.style.width = "30px";
-        work3.src = collection[0];
-        eventTrigger3.append(work3);
-        flonne += 1;
-    }
-    if (a == 1 && Filled1 == false) {
-        Filled1 = true;
-        work.src = collection[1];
-        work.style.width = "30px";
-        eventTrigger.append(work);
-        laharl += 1;
-    }
-    if (b == 1 && Filled2 == false) {
-        Filled2 = true;
-        work2.src = collection[1];
-        work2.style.width = "30px";
-        eventTrigger2.append(work2);
-        laharl += 1;
-    }
-    if (c == 1 && Filled3 == false) {
-        Filled3 = true;
-        work3.src = collection[1];
-        work3.style.width = "30px";
-        eventTrigger3.append(work3);
-        laharl += 1;
-    }
-    if (a == 2 && Filled1 == false) {
-        Filled1 = true;
-        work.src = collection[2];
-        work.style.width = "30px";
-        eventTrigger3.append(work);
-        etna += 1;
-    }
-    if (b == 2 && Filled2 == false) {
-        Filled2 = true;
-        work2.src = collection[2];
-        work2.style.width = "30px";
-        eventTrigger3.append(work2);
-        etna += 1;
-    }
-    if (c == 2 && Filled3 == false) {
-        Filled3 = true;
-        work3.src = collection[2];
-        work3.style.width = "30px";
-        eventTrigger3.append(work3);
-        etna += 1;
-    }
-    if (a == 3 && Filled1 == false) {
-        Filled1 = true;
-        work.src = collection[3];
-        work.style.width = "30px";
-        eventTrigger3.append(work);
-        etna += 1;
-    }
-    if (b == 3 && Filled2 == false) {
-        Filled2 = true;
-        work2.src = collection[3];
-        work2.style.width = "30px";
-        eventTrigger3.append(work2);
-        LOVE += 1;
-    }
-    if (c == 3 && Filled3 == false) {
-        Filled3 = true;
-        work3.src = collection[3];
-        work3.style.width = "30px";
-        eventTrigger3.append(work3);
-        LOVE += 1;
-    }
-    if (Win == 3) (0, _database.update)((0, _firebaseconfig.ref)((0, _firebaseconfig.database), 'Money-Balance'), {
-        Credit: 155000
-    });
-    if (LOVE == 3) (0, _database.update)((0, _firebaseconfig.ref)((0, _firebaseconfig.database), 'Tokens'), {
-        LOVE: (0, _database.increment)(1)
-    });
-    if (etna == 3) (0, _database.update)((0, _firebaseconfig.ref)((0, _firebaseconfig.database), 'Tokens'), {
-        EtnaToken: (0, _database.increment)(1)
-    });
-    if (flonne == 3) (0, _database.update)((0, _firebaseconfig.ref)((0, _firebaseconfig.database), 'Tokens'), {
-        FlonneToken: (0, _database.increment)(1)
-    });
-    if (laharl == 3) //laharlToken+= 1
-    //LaharlToken!.innerHTML = laharlToken as unknown as string
-    (0, _database.update)((0, _firebaseconfig.ref)((0, _firebaseconfig.database), 'Tokens'), {
-        LaharlToken: (0, _database.increment)(1)
-    });
 });
 
 },{"firebase/database":"SJ4UY","./firebaseconfig":"914MJ"}],"SJ4UY":[function(require,module,exports,__globalThis) {

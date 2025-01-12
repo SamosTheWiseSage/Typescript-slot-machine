@@ -2,15 +2,22 @@
     width: 30px;
     height: 30px;
   }
+  .hidden{
+    display: none;
+    visibility: hidden;
+  }
   .body{
     justify-content: center;
+    color: goldenrod;
+    background-color: black;
   }
   .Slot-Window{
     margin-left: 50%;
     margin-right: 50%;
-  display:list-item;
-  list-style: none;
+    margin-bottom: 10%;
+    display: flex;
   justify-content: center;
+  gap: 80px;
   }
   .Image-combo{
     display: flex;

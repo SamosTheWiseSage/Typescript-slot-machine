@@ -16,7 +16,13 @@ const Button4 = document.querySelector('#Buttonreset3');
 const ShopButton = document.querySelector('#ShopButton');
 const ExitShopButton = document.querySelector('#ExitButton');
 const GameOverDiv = document.querySelector('#Game-Over');
+const GameOverDivImage = document.querySelector('#Game-Over-Image');
+const winimages = document.querySelector("#winimages");
+let buttonok = document.createElement('button');
+winimages.classList.add('hidden');
+let assignedimg = document.createElement('img');
 const SlotWindow = document.querySelector('#SlotWindow');
+const SlotBaseText = document.querySelector('#basetext');
 const shopdiv = document.querySelector('#shop');
 shopdiv.classList.add('hidden');
 const buttonDiv = document.querySelector('#buttonDiv');
@@ -39,6 +45,7 @@ const Currency = document.querySelector('#Currency');
 let currency = 0;
 const Chips = document.querySelector('#Chips');
 let chips = 0;
+let profitschange = 0;
 const Profit = document.querySelector('#Profit');
 let flonne = 0;
 let flonneToken = 0;
@@ -55,10 +62,14 @@ const LOVEToken = document.querySelector('#loveToken');
 let Win = 0;
 let wintoken = 0;
 const WINToken = document.querySelector('#win');
+let jackpot = 0;
 let rob = 0;
 let rob2 = 0;
+let rob3 = 0;
 let robToken = 0;
 const RobToken = document.querySelector('#rob');
+let bankrupt = 0;
+const bankruptShow = document.createElement('img');
 let Filled1 = false;
 let Filled2 = false;
 let Filled3 = false;
@@ -122,8 +133,14 @@ window.addEventListener('load', function () {
     work3.src = collection[2];
     eventTrigger3.append(work3);
 });
+let isFetchingData = false;
 const fetchData = () => __awaiter(void 0, void 0, void 0, function* () {
+    if (isFetchingData) {
+        return;
+    }
+    isFetchingData = true;
     try {
+        Button.disabled = true;
         const dataRef = ref(database, 'Tokens');
         const dataRef2 = ref(database, 'Tokens/LaharlToken');
         const dataref3 = ref(database, 'Tokens/FlonneToken');
@@ -173,14 +190,15 @@ const fetchData = () => __awaiter(void 0, void 0, void 0, function* () {
             chips = datachips;
             Chips.innerHTML = 'Chips: ' + chips;
             const data = snapshot.val();
-            console.log('Fetched data:', data);
         }
         else {
-            console.log('No data available');
         }
     }
     catch (error) {
-        console.error('Error fetching data:', error);
+    }
+    finally {
+        Button.disabled = false;
+        isFetchingData = false;
     }
 });
 window.onload = fetchData;
@@ -197,15 +215,24 @@ const GameCheck = () => __awaiter(void 0, void 0, void 0, function* () {
         console.log(chips, currency);
         AlertGame.innerHTML = "Game OVER";
         const RetryButton = document.createElement('button');
+        bankruptShow.src = collection[5];
+        bankruptShow.style.width = '300px';
+        bankruptShow.style.height = '300px';
+        GameOverDivImage.classList.add('Slot-Window-Image');
+        SlotBaseText.classList.add('hidden');
+        GameOverDivImage.append(bankruptShow);
         GameOverDiv.append(RetryButton);
         RetryButton.innerText = "Try Again";
-        GameOverDiv.classList.add('Slot-Window');
+        GameOverDiv.classList.add('Slot-Windowtwo');
         SlotWindow.classList.remove('Slot-Window');
         SlotWindow.classList.add('hidden');
         buttonDiv.classList.add('hidden');
         RetryButton.addEventListener('click', () => {
             fetchData();
-            GameOverDiv.classList.remove('Slot-Window');
+            SlotBaseText.classList.remove('hidden');
+            GameOverDivImage.classList.add('hidden');
+            GameOverDivImage.classList.remove('Slot-Window-Image');
+            GameOverDiv.classList.remove('Slot-Windowtwo');
             GameOverDiv.classList.add('hidden');
             SlotWindow.classList.add('Slot-Window');
             SlotWindow.classList.remove('hidden');
@@ -213,7 +240,8 @@ const GameCheck = () => __awaiter(void 0, void 0, void 0, function* () {
             update(ref(database, 'Money-Balance'), {
                 Chips: 200,
                 Credit: 2000,
-                Debt: 0
+                Debt: 0,
+                Profit: 0
             });
         });
     }
@@ -265,13 +293,7 @@ Button.addEventListener('click', () => {
         update(ref(database, 'Money-Balance'), {
             Chips: increment(-trueSpend)
         });
-        if (chips - debt > 0) {
-            fetchData();
-            let profitschange = chips - debt;
-            update(ref(database, 'Money-Balance'), {
-                Profit: profitschange
-            });
-        }
+        Alert.innerHTML = "";
         Filled1 = false;
         Filled2 = false;
         Filled3 = false;
@@ -281,6 +303,9 @@ Button.addEventListener('click', () => {
         LOVE = 0;
         rob = 0;
         rob2 = 0;
+        rob3 = 0;
+        Win = 0;
+        jackpot = 0;
         eventTrigger.replaceChildren(work.src = "");
         eventTrigger2.replaceChildren(work2.src = "");
         eventTrigger3.replaceChildren(work3.src = "");
@@ -376,54 +401,63 @@ Button.addEventListener('click', () => {
             work.src = collection[4];
             work.style.width = "80px";
             eventTrigger.append(work);
+            Win += 1;
         }
         if (b == 5 && Filled2 == false) {
             Filled2 = true;
             work2.src = collection[4];
             work2.style.width = "80px";
             eventTrigger2.append(work2);
+            Win += 1;
         }
         if (c == 5 && Filled3 == false) {
             Filled3 = true;
             work3.src = collection[4];
             work3.style.width = "80px";
             eventTrigger3.append(work3);
+            Win += 1;
         }
         if (a == 6 && Filled1 == false) {
             Filled1 = true;
             work.src = collection[5]; //WORKRORKORKOR
             work.style.width = "80px";
             eventTrigger.append(work);
+            bankrupt += 1;
         }
         if (b == 6 && Filled2 == false) {
             Filled2 = true;
             work2.src = collection[5];
             work2.style.width = "80px";
             eventTrigger2.append(work2);
+            bankrupt += 1;
         }
         if (c == 6 && Filled3 == false) {
             Filled3 = true;
             work3.src = collection[5];
             work3.style.width = "80px";
             eventTrigger3.append(work3);
+            bankrupt += 1;
         }
         if (a == 7 && Filled1 == false) {
             Filled1 = true;
             work.src = collection[6]; //WORKRORKORKOR
             work.style.width = "80px";
             eventTrigger.append(work);
+            jackpot += 1;
         }
         if (b == 7 && Filled2 == false) {
             Filled2 = true;
             work2.src = collection[6];
             work2.style.width = "80px";
             eventTrigger2.append(work2);
+            jackpot += 1;
         }
         if (c == 7 && Filled3 == false) {
             Filled3 = true;
             work3.src = collection[6];
             work3.style.width = "80px";
             eventTrigger3.append(work3);
+            jackpot += 1;
         }
         if (a == 8 && Filled1 == false) {
             Filled1 = true;
@@ -451,73 +485,257 @@ Button.addEventListener('click', () => {
             work.src = collection[8]; //WORKRORKORKOR
             work.style.width = "80px";
             eventTrigger.append(work);
+            rob2 += 1;
         }
         if (b == 9 && Filled2 == false) {
             Filled2 = true;
             work2.src = collection[8];
             work2.style.width = "80px";
             eventTrigger2.append(work2);
+            rob2 += 1;
         }
         if (c == 9 && Filled3 == false) {
             Filled3 = true;
             work3.src = collection[8];
             work3.style.width = "80px";
             eventTrigger3.append(work3);
+            rob2 += 1;
         }
         if (a == 10 && Filled1 == false) {
             Filled1 = true;
             work.src = collection[9]; //WORKRORKORKOR
             work.style.width = "80px";
             eventTrigger.append(work);
-            rob2 += 1;
+            rob3 += 1;
         }
         if (b == 10 && Filled2 == false) {
             Filled2 = true;
             work2.src = collection[9];
             work2.style.width = "80px";
             eventTrigger2.append(work2);
-            rob2 += 1;
+            rob3 += 1;
         }
         if (c == 10 && Filled3 == false) {
             Filled3 = true;
             work3.src = collection[9];
             work3.style.width = "80px";
             eventTrigger3.append(work3);
-            rob2 += 1;
+            rob3 += 1;
         }
         if (rob == 3) {
+            fetchData();
             console.log(rob);
             Alert.innerHTML = "holymothers! your Robbed!";
             update(ref(database, 'Money-Balance'), {
                 Credit: increment(-120)
             });
         }
-        if (Win == 3) {
+        if (rob2 == 3) {
+            fetchData();
+            console.log(rob);
+            Alert.innerHTML = "It is Prinny Day dud! Salary is Due! thanks for the 220 coins!";
             update(ref(database, 'Money-Balance'), {
-                Credit: +155000
+                Credit: increment(-150)
+            });
+        }
+        if (rob3 == 3) {
+            fetchData();
+            Alert.innerHTML = "holymothers! your Robbed!";
+            update(ref(database, 'Money-Balance'), {
+                Credit: increment(-220)
+            });
+        }
+        if (Win == 3 || laharlToken >= 5 && flonneToken >= 5 && EtnaToken >= 5) {
+            fetchData();
+            Alert.innerHTML = "You win! Congratulations!";
+            update(ref(database, 'Money-Balance'), {
+                Credit: increment(1500)
+            });
+            update(ref(database, 'Money-Balance'), {
+                Profit: increment(1500)
+            });
+            AlertGame.innerHTML = "You have raised enough founds for the Overlord! you can now retire!";
+            const RetryButton = document.createElement('button');
+            bankruptShow.src = collection[4];
+            bankruptShow.style.width = '300px';
+            bankruptShow.style.height = '300px';
+            GameOverDivImage.classList.add('Slot-Window-Image');
+            SlotBaseText.classList.add('hidden');
+            GameOverDiv.classList.add('TrueWinImages');
+            GameOverDivImage.append(bankruptShow);
+            GameOverDiv.append(RetryButton);
+            RetryButton.innerText = "Play again?";
+            GameOverDiv.classList.add('Slot-Windowtwo');
+            SlotWindow.classList.remove('Slot-Window');
+            SlotWindow.classList.add('hidden');
+            buttonDiv.classList.add('hidden');
+            RetryButton.addEventListener('click', () => {
+                fetchData();
+                SlotBaseText.classList.remove('hidden');
+                GameOverDivImage.classList.add('hidden');
+                GameOverDivImage.classList.remove('Slot-Window-Image');
+                GameOverDiv.classList.remove('Slot-Windowtwo');
+                GameOverDiv.classList.add('hidden');
+                SlotWindow.classList.add('Slot-Window');
+                SlotWindow.classList.remove('hidden');
+                buttonDiv.classList.remove('hidden');
+                update(ref(database, 'Money-Balance'), {
+                    Chips: 200,
+                    Credit: 2000,
+                    Debt: 0,
+                    Profit: 0
+                });
+            });
+        }
+        if (jackpot == 3) {
+            fetchData();
+            Alert.innerHTML = "JACKPOT!";
+            update(ref(database, 'Money-Balance'), {
+                Credit: increment(10000)
+            });
+            update(ref(database, 'Money-Balance'), {
+                Profit: increment(10000)
             });
         }
         if (LOVE == 3) {
+            fetchData();
+            Alert.innerHTML = "LOVE! LOVE! *you sit through the lecture it earns you some credit atleast*";
+            update(ref(database, 'Money-Balance'), {
+                Credit: increment(100)
+            });
             update(ref(database, 'Tokens'), {
                 LOVE: increment(1)
             });
+            update(ref(database, 'Money-Balance'), {
+                Profit: increment(100)
+            });
+            fetchData();
+        }
+        if (etna == 1 && flonne == 1 && laharl == 1) {
+            fetchData();
+            Alert.innerHTML = "The orginal Trio, ah such sweet memories~";
+            update(ref(database, 'Money-Balance'), {
+                Credit: increment(55)
+            });
+            update(ref(database, 'Tokens'), {
+                EtnaToken: increment(1),
+                FlonneToken: increment(1),
+                LaharlToken: increment(1)
+            });
+            update(ref(database, 'Money-Balance'), {
+                Profit: increment(55)
+            });
+            assignedimg.src = './Images/Disgaea_Wallpaper.webp';
+            winimages.classList.remove('hidden');
+            SlotWindow.classList.remove('Slot-Window');
+            winimages.classList.add('Slot-Window');
+            SlotWindow.classList.add('hidden');
+            buttonDiv.classList.add('hidden');
+            buttonok.textContent = 'ok';
+            winimages.append(assignedimg);
+            winimages.append(buttonok);
+            buttonok.addEventListener('click', () => {
+                winimages.classList.add('hidden');
+                buttonDiv.classList.remove('hidden');
+                winimages.classList.remove('TrueWinImages');
+                winimages.classList.remove('Slot-Window');
+                SlotWindow.classList.add('Slot-Window');
+                SlotWindow.classList.remove('hidden');
+            });
+            fetchData();
         }
         if (etna == 3) {
+            fetchData();
+            Alert.innerHTML = "ETNA MODE!";
+            update(ref(database, 'Money-Balance'), {
+                Credit: increment(155)
+            });
             update(ref(database, 'Tokens'), {
                 EtnaToken: increment(1)
             });
+            update(ref(database, 'Money-Balance'), {
+                Profit: increment(155)
+            });
+            assignedimg.src = './Images/Etnagif.gif';
+            winimages.classList.remove('hidden');
+            SlotWindow.classList.remove('Slot-Window');
+            winimages.classList.add('Slot-Window');
+            SlotWindow.classList.add('hidden');
+            buttonDiv.classList.add('hidden');
+            buttonok.textContent = 'ok';
+            winimages.append(assignedimg);
+            winimages.append(buttonok);
+            buttonok.addEventListener('click', () => {
+                winimages.classList.add('hidden');
+                buttonDiv.classList.remove('hidden');
+                winimages.classList.remove('TrueWinImages');
+                winimages.classList.remove('Slot-Window');
+                SlotWindow.classList.add('Slot-Window');
+                SlotWindow.classList.remove('hidden');
+            });
+            fetchData();
         }
         if (flonne == 3) {
+            fetchData();
+            Alert.innerHTML = "Angel Power!";
+            update(ref(database, 'Money-Balance'), {
+                Credit: increment(100)
+            });
             update(ref(database, 'Tokens'), {
                 FlonneToken: increment(1)
             });
+            update(ref(database, 'Money-Balance'), {
+                Credit: increment(100)
+            });
+            assignedimg.src = './Images/Flonnegif.gif';
+            winimages.classList.remove('hidden');
+            SlotWindow.classList.remove('Slot-Window');
+            winimages.classList.add('Slot-Window');
+            SlotWindow.classList.add('hidden');
+            buttonDiv.classList.add('hidden');
+            buttonok.textContent = 'ok';
+            winimages.append(assignedimg);
+            winimages.append(buttonok);
+            buttonok.addEventListener('click', () => {
+                winimages.classList.add('hidden');
+                buttonDiv.classList.remove('hidden');
+                winimages.classList.remove('TrueWinImages');
+                winimages.classList.remove('Slot-Window');
+                SlotWindow.classList.add('Slot-Window');
+                SlotWindow.classList.remove('hidden');
+            });
+            fetchData();
         }
         if (laharl == 3) {
-            //laharlToken+= 1
-            //LaharlToken!.innerHTML = laharlToken as unknown as string
+            fetchData();
+            Alert.innerHTML = "The one true Overlord!";
+            update(ref(database, 'Money-Balance'), {
+                Credit: increment(200)
+            });
             update(ref(database, 'Tokens'), {
                 LaharlToken: increment(1)
             });
+            update(ref(database, 'Money-Balance'), {
+                Profit: increment(200)
+            });
+            assignedimg.src = './Images/LaharlGif.gif';
+            winimages.classList.remove('hidden');
+            SlotWindow.classList.remove('Slot-Window');
+            winimages.classList.add('Slot-Window');
+            SlotWindow.classList.add('hidden');
+            buttonDiv.classList.add('hidden');
+            buttonok.textContent = 'ok';
+            winimages.append(assignedimg);
+            winimages.append(buttonok);
+            buttonok.addEventListener('click', () => {
+                winimages.classList.add('hidden');
+                buttonDiv.classList.remove('hidden');
+                winimages.classList.remove('TrueWinImages');
+                winimages.classList.remove('Slot-Window');
+                SlotWindow.classList.add('Slot-Window');
+                SlotWindow.classList.remove('hidden');
+            });
+            fetchData();
         }
     }
 });

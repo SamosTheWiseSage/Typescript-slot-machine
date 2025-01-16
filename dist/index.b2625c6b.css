@@ -23,6 +23,31 @@
   display: flex;
 }
 
+.TrueWinImages {
+  margin-right: 50%;
+  list-style: none;
+  display: list-item;
+}
+
+.Slot-Windowtwo {
+  justify-content: center;
+  gap: 80px;
+  margin-bottom: 10%;
+  margin-left: 50%;
+  margin-right: 50%;
+  list-style: none;
+  display: list-item;
+}
+
+.Slot-Window-Image {
+  justify-content: center;
+  gap: 80px;
+  margin-top: 10%;
+  margin-left: 50%;
+  margin-right: 50%;
+  display: flex;
+}
+
 .Image-combo {
   justify-content: center;
   display: flex;

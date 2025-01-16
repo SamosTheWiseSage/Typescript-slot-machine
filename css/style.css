@@ -19,6 +19,28 @@
   justify-content: center;
   gap: 80px;
   }
+  .TrueWinImages{
+    display: list-item;
+    list-style: none;
+    margin-right: 50%;
+  }
+  .Slot-Windowtwo{
+    margin-left: 50%;
+    margin-right: 50%;
+    margin-bottom: 10%;
+  justify-content: center;
+  display: list-item;
+  list-style: none;
+  gap: 80px;
+  }
+  .Slot-Window-Image{
+    margin-left: 50%;
+    margin-right: 50%;
+   margin-top: 10%;
+    display: flex;
+  justify-content: center;
+  gap: 80px;
+  }
   .Image-combo{
     display: flex;
     justify-content: center;

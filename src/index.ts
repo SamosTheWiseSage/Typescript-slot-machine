@@ -198,15 +198,8 @@ const fetchData = async () => {
 };
 window.onload = fetchData
 const GameCheck = async ()=> {
-  if (chips <= 0 && currency !=0) {
-    Alert!.innerHTML = "You cannot bet 0 chips sir/madam. please use the shop"
-    shopdiv!.classList.remove('hidden')
-    SlotWindow!.classList.remove('Slot-Window')
-    SlotWindow!.classList.add('hidden')
-    buttonDiv!.classList.add('hidden')
-    ShopButton.classList.add('hidden')
-  } 
-  if (chips <= 0 && currency <= 0) {
+
+  if (chips <= 0 && currency <= 0 || chips <=0 && currency <20) {
     console.log(chips,currency)
     AlertGame.innerHTML = "Game OVER"
     const RetryButton = document.createElement('button')
@@ -238,7 +231,16 @@ const GameCheck = async ()=> {
         Debt: 0,
         Profit: 0
       });
-})} 
+})} else{
+    if (chips <= 0 && currency !=0) {
+    Alert!.innerHTML = "You cannot bet 0 chips sir/madam. please use the shop"
+    shopdiv!.classList.remove('hidden')
+    SlotWindow!.classList.remove('Slot-Window')
+    SlotWindow!.classList.add('hidden')
+    buttonDiv!.classList.add('hidden')
+    ShopButton.classList.add('hidden')
+  } 
+}
 }
 ExitShopButton.addEventListener('click', ()=>{
   Alert!.innerHTML = ""
@@ -544,7 +546,7 @@ if (rob3==3) {
     Credit: increment(-220)
   });
 }
-if (Win==3 || laharlToken>=5 && flonneToken >=5 && EtnaToken>=5) {
+if (Win==3 || laharlToken>=5 && flonneToken >=5 && EtnaToken>=5 || currency >= 5000) {
   fetchData()
   Alert.innerHTML="You win! Congratulations!"
   update(ref(database, 'Money-Balance'), {
@@ -600,13 +602,13 @@ if (LOVE==3) {
   fetchData()
   Alert.innerHTML="LOVE! LOVE! *you sit through the lecture it earns you some credit atleast*"
   update(ref(database, 'Money-Balance'), {
-    Credit: increment(100)
+    Credit: increment(200)
   });
   update(ref(database, 'Tokens'), {
     LOVE: increment(1)
   });
 update(ref(database, 'Money-Balance'), {
-Profit: increment(100)
+Profit: increment(200)
 });
 fetchData()
 }
@@ -614,7 +616,7 @@ if (etna ==1 && flonne ==1 && laharl==1) {
   fetchData()
   Alert.innerHTML="The orginal Trio, ah such sweet memories~"
   update(ref(database, 'Money-Balance'), {
-    Credit: increment(55)
+    Credit: increment(255)
   });
   update(ref(database, 'Tokens'), {
     EtnaToken: increment(1),
@@ -622,12 +624,14 @@ if (etna ==1 && flonne ==1 && laharl==1) {
     LaharlToken: increment(1)
   });
 update(ref(database, 'Money-Balance'), {
-Profit: increment(55)
+Profit: increment(255)
 });
 assignedimg.src = './Images/Disgaea_Wallpaper.webp'
 winimages.classList.remove('hidden')
 SlotWindow!.classList.remove('Slot-Window')
 winimages.classList.add('Slot-Window')
+assignedimg.style.width = "200px"
+assignedimg.style.height = "200px"
 SlotWindow!.classList.add('hidden')
 buttonDiv!.classList.add('hidden')
 buttonok.textContent = 'ok'

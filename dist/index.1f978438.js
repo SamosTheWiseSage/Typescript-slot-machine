@@ -800,15 +800,7 @@ const fetchData = ()=>__awaiter(void 0, void 0, void 0, function*() {
     });
 window.onload = fetchData;
 const GameCheck = ()=>__awaiter(void 0, void 0, void 0, function*() {
-        if (chips <= 0 && currency != 0) {
-            Alert.innerHTML = "You cannot bet 0 chips sir/madam. please use the shop";
-            shopdiv.classList.remove('hidden');
-            SlotWindow.classList.remove('Slot-Window');
-            SlotWindow.classList.add('hidden');
-            buttonDiv.classList.add('hidden');
-            ShopButton.classList.add('hidden');
-        }
-        if (chips <= 0 && currency <= 0) {
+        if (chips <= 0 && currency <= 0 || chips <= 0 && currency < 20) {
             console.log(chips, currency);
             AlertGame.innerHTML = "Game OVER";
             const RetryButton = document.createElement('button');
@@ -841,6 +833,13 @@ const GameCheck = ()=>__awaiter(void 0, void 0, void 0, function*() {
                     Profit: 0
                 });
             });
+        } else if (chips <= 0 && currency != 0) {
+            Alert.innerHTML = "You cannot bet 0 chips sir/madam. please use the shop";
+            shopdiv.classList.remove('hidden');
+            SlotWindow.classList.remove('Slot-Window');
+            SlotWindow.classList.add('hidden');
+            buttonDiv.classList.add('hidden');
+            ShopButton.classList.add('hidden');
         }
     });
 ExitShopButton.addEventListener('click', ()=>{
@@ -1142,7 +1141,7 @@ Button.addEventListener('click', ()=>{
                 Credit: (0, _database.increment)(-220)
             });
         }
-        if (Win == 3 || laharlToken >= 5 && flonneToken >= 5 && EtnaToken >= 5) {
+        if (Win == 3 || laharlToken >= 5 && flonneToken >= 5 && EtnaToken >= 5 || currency >= 5000) {
             fetchData();
             Alert.innerHTML = "You win! Congratulations!";
             (0, _database.update)((0, _firebaseconfig.ref)((0, _firebaseconfig.database), 'Money-Balance'), {
@@ -1198,13 +1197,13 @@ Button.addEventListener('click', ()=>{
             fetchData();
             Alert.innerHTML = "LOVE! LOVE! *you sit through the lecture it earns you some credit atleast*";
             (0, _database.update)((0, _firebaseconfig.ref)((0, _firebaseconfig.database), 'Money-Balance'), {
-                Credit: (0, _database.increment)(100)
+                Credit: (0, _database.increment)(200)
             });
             (0, _database.update)((0, _firebaseconfig.ref)((0, _firebaseconfig.database), 'Tokens'), {
                 LOVE: (0, _database.increment)(1)
             });
             (0, _database.update)((0, _firebaseconfig.ref)((0, _firebaseconfig.database), 'Money-Balance'), {
-                Profit: (0, _database.increment)(100)
+                Profit: (0, _database.increment)(200)
             });
             fetchData();
         }
@@ -1212,7 +1211,7 @@ Button.addEventListener('click', ()=>{
             fetchData();
             Alert.innerHTML = "The orginal Trio, ah such sweet memories~";
             (0, _database.update)((0, _firebaseconfig.ref)((0, _firebaseconfig.database), 'Money-Balance'), {
-                Credit: (0, _database.increment)(55)
+                Credit: (0, _database.increment)(255)
             });
             (0, _database.update)((0, _firebaseconfig.ref)((0, _firebaseconfig.database), 'Tokens'), {
                 EtnaToken: (0, _database.increment)(1),
@@ -1220,12 +1219,14 @@ Button.addEventListener('click', ()=>{
                 LaharlToken: (0, _database.increment)(1)
             });
             (0, _database.update)((0, _firebaseconfig.ref)((0, _firebaseconfig.database), 'Money-Balance'), {
-                Profit: (0, _database.increment)(55)
+                Profit: (0, _database.increment)(255)
             });
             assignedimg.src = './Images/Disgaea_Wallpaper.webp';
             winimages.classList.remove('hidden');
             SlotWindow.classList.remove('Slot-Window');
             winimages.classList.add('Slot-Window');
+            assignedimg.style.width = "200px";
+            assignedimg.style.height = "200px";
             SlotWindow.classList.add('hidden');
             buttonDiv.classList.add('hidden');
             buttonok.textContent = 'ok';

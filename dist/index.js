@@ -235,6 +235,11 @@ const GameCheck = () => __awaiter(void 0, void 0, void 0, function* () {
                 Debt: 0,
                 Profit: 0
             });
+            update(ref(database, 'Tokens'), {
+                EtnaToken: 0,
+                FlonneToken: 0,
+                LaharlToken: 0
+            });
         });
     }
     else {

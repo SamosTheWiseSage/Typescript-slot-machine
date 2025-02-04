@@ -231,6 +231,11 @@ const GameCheck = async ()=> {
         Debt: 0,
         Profit: 0
       });
+      update(ref(database, 'Tokens'), {
+        EtnaToken: 0,
+        FlonneToken: 0,
+        LaharlToken: 0
+      });
 })} else{
     if (chips <= 0 && currency !=0) {
     Alert!.innerHTML = "You cannot bet 0 chips sir/madam. please use the shop"
